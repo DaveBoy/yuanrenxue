@@ -4,24 +4,6 @@ var chrsz = 16;
 function hex_md5(a) {
     return binl2hex(core_md5(str2binl(a), a.length * chrsz))
 }
-function b64_md5(a) {
-    return binl2b64(core_md5(str2binl(a), a.length * chrsz))
-}
-function str_md5(a) {
-    return binl2str(core_md5(str2binl(a), a.length * chrsz))
-}
-function hex_hmac_md5(a, b) {
-    return binl2hex(core_hmac_md5(a, b))
-}
-function b64_hmac_md5(a, b) {
-    return binl2b64(core_hmac_md5(a, b))
-}
-function str_hmac_md5(a, b) {
-    return binl2str(core_hmac_md5(a, b))
-}
-function md5_vm_test() {
-    return hex_md5("abc") == "900150983cd24fb0d6963f7d28e17f72"
-}
 function core_md5(p, k) {
     p[k >> 5] |= 128 << ((k) % 32);
     p[(((k + 64) >>> 9) << 4) + 14] = k;
@@ -120,20 +102,7 @@ function md5_hh(g, f, k, j, e, i, h) {
 function md5_ii(g, f, k, j, e, i, h) {
     return md5_cmn(k ^ (f | (~j)), g, f, e, i, h)
 }
-function core_hmac_md5(c, f) {
-    var e = str2binl(c);
-    if (e.length > 16) {
-        e = core_md5(e, c.length * chrsz)
-    }
-    var a = Array(16),
-    d = Array(16);
-    for (var b = 0; b < 16; b++) {
-        a[b] = e[b] ^ 909522486;
-        d[b] = e[b] ^ 1549556828
-    }
-    var g = core_md5(a.concat(str2binl(f)), 512 + f.length * chrsz);
-    return core_md5(d.concat(g), 512 + 128)
-}
+
 function safe_add(a, d) {
     var c = (a & 65535) + (d & 65535);
     var b = (a >> 16) + (d >> 16) + (c >> 16);
@@ -150,14 +119,7 @@ function str2binl(d) {
     }
     return c
 }
-function binl2str(c) {
-    var d = "";
-    var a = (1 << chrsz) - 1;
-    for (var b = 0; b < c.length * 32; b += chrsz) {
-        d += String.fromCharCode((c[b >> 5] >>> (b % 32)) & a)
-    }
-    return d
-}
+
 function binl2hex(c) {
     var b = hexcase ? "0123456789ABCDEF" : "0123456789abcdef";
     var d = "";
@@ -166,18 +128,4 @@ function binl2hex(c) {
     }
     return d
 }
-function binl2b64(d) {
-    var c = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    var f = "";
-    for (var b = 0; b < d.length * 4; b += 3) {
-        var e = (((d[b >> 2] >> 8 * (b % 4)) & 255) << 16) | (((d[b + 1 >> 2] >> 8 * ((b + 1) % 4)) & 255) << 8) | ((d[b + 2 >> 2] >> 8 * ((b + 2) % 4)) & 255);
-        for (var a = 0; a < 4; a++) {
-            if (b * 8 + a * 6 > d.length * 32) {
-                f += b64pad
-            } else {
-                f += c.charAt((e >> 6 * (3 - a)) & 63)
-            }
-        }
-    }
-    return f
-};
+

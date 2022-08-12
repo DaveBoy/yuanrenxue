@@ -39,4 +39,4 @@ for i in range(0, 5):
 total = 0
 for price in prices:
     total += price
-print(total / len(prices))
+print(total / len(prices))  # 如果小数位是0，就填整数
