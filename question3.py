@@ -24,6 +24,10 @@ header = {
     "Accept-Language": "zh-CN,zh;q=0.9",
 }
 
+cookie = {
+    "qpfccr": "true",
+}
+
 
 def js_from_file(file_name):
     """
@@ -47,13 +51,10 @@ cookieM = getM()
 
 def getData(page):
     global cookieM
-    cookie = {
-        "m": "b6466fb5c10f8f26c40cd453a80d0f89|1660377486000"
-    }
     session.headers.clear()
     session.headers.update(header)
     resp = session.post("https://match.yuanrenxue.com/jssm", cookies=cookie, verify=False)
-    resp = session.get("https://match.yuanrenxue.com/api/match/3?page=" + str(page), cookies=cookie,
+    resp = session.get("https://match.yuanrenxue.com/api/match/3?page=" + str(page),
                        verify=False)
     if resp.status_code != 200:
         cookieM = getM()
@@ -76,6 +77,7 @@ for i in range(0, 5):
     getData(i + 1)
 
 index = 0
+
 for c in count:
     if c > count[index]:
         index = count.index(c)
