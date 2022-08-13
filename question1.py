@@ -20,7 +20,7 @@ def js_from_file(file_name):
     return result
 
 
-prices = []
+
 
 
 def requestData(number):
@@ -32,7 +32,7 @@ def requestData(number):
     for data in datas:
         prices.append(data["value"])
 
-
+prices = []
 for i in range(0, 5):
     requestData(i + 1)
 
