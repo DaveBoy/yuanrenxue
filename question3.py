@@ -29,46 +29,24 @@ cookie = {
 }
 
 
-def js_from_file(file_name):
-    """
-    读取js文件
-    :return:
-    """
-    with open(file_name, 'r', encoding='UTF-8') as file:
-        result = file.read()
-
-    return result
-
-
-def getM():
-    # res = execjs.compile(js_from_file('./question2.js')).call("getCookie")
-    # print(res)
-    return ""
-
-
-cookieM = getM()
 
 
 def getData(page):
-    global cookieM
     session.headers.clear()
     session.headers.update(header)
     resp = session.post("https://match.yuanrenxue.com/jssm", cookies=cookie, verify=False)
     resp = session.get("https://match.yuanrenxue.com/api/match/3?page=" + str(page),
                        verify=False)
-    if resp.status_code != 200:
-        cookieM = getM()
-        getData(page)
-    else:
-        datas = resp.json()["data"]
-        for data in datas:
-            price = data["value"]
-            try:
-                index = prices.index(price)
-                count[index] = count[index] + 1
-            except:
-                prices.append(price)
-                count.append(1)
+
+    datas = resp.json()["data"]
+    for data in datas:
+        price = data["value"]
+        try:
+            index = prices.index(price)
+            count[index] = count[index] + 1
+        except:
+            prices.append(price)
+            count.append(1)
 
 
 prices = []
